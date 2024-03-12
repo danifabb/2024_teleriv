@@ -1,0 +1,5 @@
+# satellite data visulisation in R by imageRy
+library(terra)
+library(imageRy) #tutte le funzioni iniziano con im.
+im.list() #lista di dati che abbiamo già caricato nel pacchetto
+mato <- im.import("matogrosso_ast_2006209_lrg.jpg")
