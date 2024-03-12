@@ -1,7 +1,7 @@
 install.packages("terra")
-library(terra)
+library(terra) #or require()
 install.packages("devtools")
 library(devtools)
 #imageRy serve per risparmiare tempo nell'import ed export di immagini (inventato da DR per didattica)
-devtools::install_github("ducciorocchini/imageRy") #per fare vedere che quella funzione deriva dal pacchetto devtools
+devtools::install_github("ducciorocchini/imageRy") # per fare vedere che quella funzione deriva dal pacchetto devtools, il pacchetto imageRy si trova nell'account di DR
 library(imageRy)
