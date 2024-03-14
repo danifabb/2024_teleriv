@@ -10,14 +10,47 @@ b2 <- im.import("sentinel.dolomites.b2.tif") # Tofane; b2 = banda che comprende 
 clg <- colorRampPalette(c("black", "grey", "light grey"))(100) # cambiamo la scala di colori; 100 si riferisce alle sfumature tra un colore e l'altro
 plot(b2, col=clg)
 clcyan <- colorRampPalette(c("magenta", "cyan4", "cyan"))(100)  prendi i colori scrivendo R color names
- plot(b2, col=clcyan)
+plot(b2, col=clcyan)
 # la roccia riflette anche nel blu, infatti è bianca, ovvero riflette tutto lo spettro 
 # la parte viola (riflettanza bassa), che non riflette il blu bensì lo assorbe, è la vegetazione, infatti le foglie assorbono blu e rosso, riflettendo il verde
 # riflettanza normalmente va da 0 a 1; per la vegetazione, la riflettanza nel blu è bassa 
 # importiamo anche la banda del verde
-b3 <- im.import("sentinel.dolomites.b3.tif") 
+b3 <- im.import("sentinel.dolomites.b3.tif") # green band
 plot(b3, col=clcyan)
-b4 <- im.import("sentinel.dolomites.b4.tif") 
+b4 <- im.import("sentinel.dolomites.b4.tif") # red band
 plot(b4, col=clcyan)
-b8 <- im.import("sentinel.dolomites.b8.tif") 
+b8 <- im.import("sentinel.dolomites.b8.tif") # NIR band
 plot(b8, col=clcyan)
+
+# multiframe: contiene vari grafici assieme; metto 4 bande assieme in un unico plot
+par(mfrow=c(2,2)) # 2 righe e 2 colonne che sono parte dello stesso array, quindi uniti da c
+plot(b2, col=clcyan)
+plot(b3, col=clcyan)
+plot(b4, col=clcyan)
+plot(b8, col=clcyan)
+
+# aggiungo colore chartreuse a palette
+cl4 <- colorRampPalette(c("magenta", "cyan4", "cyan", "chartreuse"))(100)
+par(mfrow=c(2,2))
+plot(b2, col=cl4)
+plot(b3, col=cl4)
+plot(b4, col=cl4)
+plot(b8, col=cl4)
+
+# plotto 4 immagini una dopo l'altra nella stessa riga
+par(mfrow=c(1, 4))
+plot(b2, col=cl4)
+plot(b3, col=cl4)
+plot(b4, col=cl4)
+plot(b8, col=cl4)
+
+# stack: singola immagine satellitare con tutte le bande assieme
+stacksent <- c(b2, b3, b4, b8)
+plot(stacksent, col=cl4)
+
+# singoli elementi selezionati con la parentesi quadra
+plot(stacksent[[4]], col=cl4) #2 parentesi quadre, perché voglio sia righe che colonne di pixel (siamo in 2 dimensioni, è una matrice)
+
+
+
+
