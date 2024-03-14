@@ -2,4 +2,22 @@
 library(terra)
 library(imageRy) #tutte le funzioni iniziano con im.
 im.list() #lista di dati che abbiamo già caricato nel pacchetto
+# importing data
 mato <- im.import("matogrosso_ast_2006209_lrg.jpg")
+plot(mato)
+#abbiamo cambiato idea: plottiamo per prima cosa 1 singola banda (nell'immagine del Mato Grosso ci sono invece direttamente tutte le bande)
+b2 <- im.import("sentinel.dolomites.b2.tif") # Tofane; b2 = banda che comprende ciò che riflette nel blu es. acqua
+clg <- colorRampPalette(c("black", "grey", "light grey"))(100) # cambiamo la scala di colori; 100 si riferisce alle sfumature tra un colore e l'altro
+plot(b2, col=clg)
+clcyan <- colorRampPalette(c("magenta", "cyan4", "cyan"))(100)  prendi i colori scrivendo R color names
+ plot(b2, col=clcyan)
+# la roccia riflette anche nel blu, infatti è bianca, ovvero riflette tutto lo spettro 
+# la parte viola (riflettanza bassa), che non riflette il blu bensì lo assorbe, è la vegetazione, infatti le foglie assorbono blu e rosso, riflettendo il verde
+# riflettanza normalmente va da 0 a 1; per la vegetazione, la riflettanza nel blu è bassa 
+# importiamo anche la banda del verde
+b3 <- im.import("sentinel.dolomites.b3.tif") 
+plot(b3, col=clcyan)
+b4 <- im.import("sentinel.dolomites.b4.tif") 
+plot(b4, col=clcyan)
+b8 <- im.import("sentinel.dolomites.b8.tif") 
+plot(b8, col=clcyan)
