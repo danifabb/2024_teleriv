@@ -51,6 +51,23 @@ plot(stacksent, col=cl4)
 # singoli elementi selezionati con la parentesi quadra
 plot(stacksent[[4]], col=cl4) #2 parentesi quadre, perché voglio sia righe che colonne di pixel (siamo in 2 dimensioni, è una matrice)
 
+plot(stacksent[[4]]) # faccio un subset dello stacksent con solo la quarta banda, ovvero quella dell'infrarosso
 
+# RGB plotting - di solito le bande sono in ordine red green blue
+# qui però le bande sono posizionate diversamente:
+# stacksent[[1]] = b2 = blue
+# stacksent[[2]] = b3 = green
+# stacksent[[3]] = b4 = red
+# stacksent[[4]] = b8 = near infrared (NIR)
+
+im.plotRGB(stacksent, r=3, g=2, b=1)
+
+# per rendere l'immagine piu chiara sostituisco infrarosso (4) al posto della componente red
+im.plotRGB(stacksent, r=4, g=2, b=1)
+# infrarosso potenzia la visione es. vedo una piccola prateria, vedo molto più chiaramente i crepacci
+
+par(mfrow=c(1,2))
+im.plotRGB(stacksent, r=3, g=2, b=1)
+im.plotRGB(stacksent, r=4, g=2, b=1)
 
 
