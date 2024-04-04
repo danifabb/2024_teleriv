@@ -51,3 +51,12 @@ par(mfrow=c(1,2))
 plot(dvi_1992, col=cl)
 plot(dvi_2006, col=cl)
 
+#normalized dvi
+ndvi_1992 <- dvi_1992/ (m1992[[1]] + m1992[[2]])
+ndvi_2006 <- dvi_2006/ (m2006[[1]] + m2006[[2]])
+
+par(mfrow=c(1,2))
+plot(ndvi_1992, col=cl)
+plot(ndvi_2006, col_cl)
+
+
