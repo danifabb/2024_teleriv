@@ -59,4 +59,12 @@ par(mfrow=c(1,2))
 plot(ndvi_1992, col=cl)
 plot(ndvi_2006, col_cl)
 
+# come possiamo fare per "insegnare" al sistema varie classi? ex. ghiacciaio, pianure, bosco, centro urbano 
+# grafico a 3 dimensioni (per 3 bande) - come sono distribuiti i pixel di una certa immagine nello spazio spettrale? es. riflettanza bassa nel verde, bassa nel  blu, alta nel NIR
+# individuiamo gruppi = cluster (es, suolo nudo e vegetazione saranno 2 cluster diversi) = training sites per far capire all'algoritmo (machine learning) cosa intendiamo per classi 
+# e se un pixel si posizionasse tra i due cluster? si calcola distanza del pixel incognito dai due cluster: a quale  è più vicino? 
+# algoritmo k-means classifica ogni pixel sulla base dei training sites 
+# ora possiamo vodere come varia nel tempo il numeero di pixel dei diversi cluster
+
+
 
