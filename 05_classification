@@ -3,12 +3,12 @@ library(imageRy)
 library(ggplot2)
 library(patchwork)
 
-# quantifying land cover variability
+# quantifying land cover variability: ho un grafico a 3 dimensioni (= 3 bande); 
 im.list()
 #importing data
 sun <- im.import("Solar_Orbiter_s_first_views_of_the_Sun_pillars.jpg")
 # possiamo fare una classificazione in base ai livelli energetici (giallo, marrone, nero)
-sunc <- im.classify(sun, num_clusters=3) # plot creato in automatico, algoritmo ha selezionato colori a caso per i tre cluster 8noi possiamo avere classi invertite rispetto a lui)
+sunc <- im.classify(sun, num_clusters=3) # plot creato in automatico, algoritmo ha selezionato colori a caso per i tre cluster (noi possiamo avere classi invertite rispetto a lui)
 
 # Mato Grosso images
 m1992 <- im.import("matogrosso_l5_1992219_lrg.jpg")
