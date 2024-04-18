@@ -25,3 +25,21 @@ dif = eclissi[[1]] - eclissi[[2]] # non ha nessun senso, è solo per vedere
 postumia <- rast("download.jpeg") # importo un'immagine a caso
 plotRGB(postumia, 1, 2, 3) #verde sul rosso
 plotRGB(postumia, 3, 2, 1) #blu sul rosso
+
+install.packages("ncdf4") # per immagini Copernicus (file CN)
+library(ncdf4)
+
+install.packages("RNetCDF")
+library(RNetCDF)
+
+#importing data
+soil <- rast("c_gls_SSM1km_202404160000_CEURO_S1CSAR_V1.2.1.nc")
+soil
+plot(soil) # due immagini
+plot(soil[[1]]) #solo prima immagine
+
+# cropping image
+ext <- c(25, 35, 58, 62) # longtudine e latitudine
+soilcrop <- crop(soil, ext)
+plot(soilcrop[[1]])
+
