@@ -41,5 +41,5 @@ plot(soil[[1]]) #solo prima immagine
 # cropping image
 ext <- c(25, 35, 58, 62) # longtudine e latitudine
 soilcrop <- crop(soil, ext)
-plot(soilcrop[[1]])
+plot(soilcrop[[1]]) # immagine tagliata nella zone di interesse, con coordinate precise
 
