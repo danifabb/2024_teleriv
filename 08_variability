@@ -16,7 +16,7 @@ im.plotRGB(sent, r=1, g=2, b=3) #suolo nudo = celeste, foresta = rossa; acqua as
 #red = band 2 (verde)
 #green = band 3 (blu)
 
-im.plotRGB(sent, 2, 1, 3) # rosso sul verde (anch'esso riflesso dalla foresta)
+im.plotRGB(sent, 2, 1, 3) # verde sul nir 
 
 # moving window - metodo per calcolare la deviazione standard; si tratta di una finestra mobile che viene spostata sull'immagine
 # per ognuna della finestre, si calcola la variabilità di pixel 
@@ -32,18 +32,30 @@ sd3 <- focal(nir, matrix(1/9, 3, 3), fun=sd)
 # matrice: serve a definire la finestra di calcolo
 # usiamo ogni singolo pixel nel calcolo, da 1 a 9 --> 1/9; ogni finestra è 3x3 pixel --> 3, 3
 # non chiamarlo sd perché quella è la funzione
-plot(sd3)
+plot(sd3) 
 
 #usiamo viridis per rendere la palette più inclusiva
 install.packages("viridis")
 library(viridis)
 
+#palette già pronta viridis
+viridisc <- colorRampPalette(viridis(7))(100)
+plot(sd3, col=viridisc) # si vedono bene i crateri a nord-ovest e nella parte dx dell'immagine; sono evidenziati i punti in cui la variabilità è più alta es. punti in cui si passa da crepaccio a foresta
 
+sd7 <- focal(nir, matrix(1/49, 7, 7), fun=sd) 
+plot(sd7, col=viridisc) # molti più pixel inseriti nel calcolo - questa questione dei pixel non l'hai capita
 
+sd13 <- focal(nir, matrix(1/169, 13, 13), fun=sd) 
+plot(sd13, col=viridisc)
 
+# finestre di calcolo più piccole come 3x3 individuano microvariazioni, dettagli minori (--> massima sd è maggiore), mentre finestre di calcolo più grandi individuano macrovariazioni (--> massima sd è minore)
+# n aumenta --> sd diminuisce!
+stacksd <- c(sd3, sd7, sd13)
+plot(stacksd, col=viridisc)
 
-
-
+#per analisi multivariata: possiamo spiegare la varianza; banda b1 e b2 sono correlate 
+# il primo asse spiega la maggior parte della varianza mentre il secondo asse spiega solo il 10%. posso usare la prima componente per fare i calcoli, perdendo solo il 10% dell'informazione
+# se c'è alta correlazione fra le bande, si può usare analisi multivariata
 
 
 
