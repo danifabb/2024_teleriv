@@ -1,0 +1,60 @@
+# stardand deviation to study variability
+#sottraggo media campionaria da ogni campione, elevo al quadrato (amplificazione del dato); divido per n - 1 (numero di studenti - 1) e faccio radice quadrata
+# deviazione standard rappresenta intervallo che include il 68 % dei dati
+# se aggiungo u dati esterni che spostano la media, cambierà molto anche la deviazione standard
+
+#pacchetto viridis (mappe per daltonici)
+# measuring spatial variability
+library(imageRy)
+library(terra)
+im.list()
+sent <- im.import("sentinel.png") #satellite lanciato nel 2015, risoluzione 10 m
+# banda di controllo verde non serve
+im.plotRGB(sent, r=1, g=2, b=3) #suolo nudo = celeste, foresta = rossa; acqua assorbe infrarosso quindi è nera; c'è anche neve
+#foresta è rossa, quindi:
+#nir = band 1 (rosso) - rosso sul nir --> foresta riflette nir e quindi è rossa
+#red = band 2 (verde)
+#green = band 3 (blu)
+
+im.plotRGB(sent, 2, 1, 3) # rosso sul verde (anch'esso riflesso dalla foresta)
+
+# moving window - metodo per calcolare la deviazione standard; si tratta di una finestra mobile che viene spostata sull'immagine
+# per ognuna della finestre, si calcola la variabilità di pixel 
+
+# bisogna scegliere una banda su cui fare questa moving window: nir
+nir <- sent[[1]]
+plot(nir) # banda IR che useremo per fare i calcoli 
+cl <- colorRampPalette(c("red", "orange", "yellow"))(100) # 100 è il numero di sfumature
+plot(nir, col=cl) # abbiamo definito banda su cui calcolare la SD
+
+# valori focali = valori statistici all'interno di un gruppo di dati
+sd3 <- focal(nir, matrix(1/9, 3, 3), fun=sd) 
+# matrice: serve a definire la finestra di calcolo
+# usiamo ogni singolo pixel nel calcolo, da 1 a 9 --> 1/9; ogni finestra è 3x3 pixel --> 3, 3
+# non chiamarlo sd perché quella è la funzione
+plot(sd3)
+
+#usiamo viridis per rendere la palette più inclusiva
+install.packages("viridis")
+library(viridis)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
