@@ -49,7 +49,7 @@ sd13 <- focal(nir, matrix(1/169, 13, 13), fun=sd)
 plot(sd13, col=viridisc)
 
 # finestre di calcolo più piccole come 3x3 individuano microvariazioni, dettagli minori (--> massima sd è maggiore), mentre finestre di calcolo più grandi individuano macrovariazioni (--> massima sd è minore)
-# n aumenta --> sd diminuisce!
+# n aumenta --> sd diminuisce! (vedi formula)
 stacksd <- c(sd3, sd7, sd13)
 plot(stacksd, col=viridisc)
 
