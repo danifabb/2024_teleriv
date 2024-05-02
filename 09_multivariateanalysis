@@ -45,7 +45,7 @@ plot(pcimage, col=viridis(100)) # per far prima
 
 plot(pcimage, col=plasma(100)) # altra palette già fatta su viridis
 
-
+#ora possiamo calcolare parametri statistici con funzione focal, es. sd e non dobbiamo scegliere su quale banda farla 
 
 
 
