@@ -1,0 +1,28 @@
+# come compattare un dato in una sola dimensione: l'analisi multivariata
+# immagini iperspettrali: centinaia di bande. Non si può scegliere 1 banda sola per fare il calcolo come abbiamo fatto l'altra volta (calcolo sd)
+# Salvador Dalì voleva rappresentare la quarta dimensione; ipercubo/ croce in quattro dimensioni
+
+# abbiamo variabili che sono correlate tra loro? Possiamo racchiuderle/ compattarle in un'unica dimensione
+# grafico con 2 bande correlate tra loro
+# analisi delle componenti principali: 2 nuovi assi, PC1 e PC2 (principal components) che spiegano assieme tutta l'informazione 
+# PC1 spiega 90% dell'informazione (contiene gran parte del range del dato originario), PC2 spiega l'altro 10% --> posso fare analisi sulla PC1
+# se le due bande non sono correlate linearmente, si usano i logaritmi
+# temperatura, pressione, pH, quota: non si va da 0 a 255 come per i bit --> bisogna standardizzare dati
+
+library(terra)
+library(imageRy)
+library(viridis) # for the final plot
+im.list()
+
+#importiamo separatamente le 4 bande; so quale banda è quale colore perché in Sentinel è sempre così!
+b2 <- im.import("sentinel.dolomites.b2.tif") #blue
+b3 <- im.import("sentinel.dolomites.b3.tif") #green
+b4 <- im.import("sentinel.dolomites.b4.tif") #red
+b8 <- im.import("sentinel.dolomites.b8.tif") #nir
+
+sentdo <- c(b2, b3, b4, b8)
+im.plotRGB(sentdo, r=4, g=3, b=2) #nella componente del rosso metto nir, nella componente del verde metto il rosso, nella componente blu metto il verde
+im.plotRGB(sentdo, r=3, g=4, b=2) #metto nir su componente verde
+
+pairs(sentdo) #correlazione tra bande
+
