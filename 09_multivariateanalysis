@@ -24,10 +24,29 @@ sentdo <- c(b2, b3, b4, b8)
 im.plotRGB(sentdo, r=4, g=3, b=2) #nella componente del rosso metto nir, nella componente del verde metto il rosso, nella componente blu metto il verde
 im.plotRGB(sentdo, r=3, g=4, b=2) #metto nir su componente verde
 
-pairs(sentdo) #correlazione tra bande
+pairs(sentdo) #correlazione tra bande (indagine conoscitiva)
 
 # b2 è molto correlata con b3 e b4
 # b3 è molto correlata con b2 e b4
 # nir ha correlazione con le altre bande ma è minore (0.71)
+
+#four principles for improved statistical ecology (articolo)
+
+# pca (principal components analysis)
+pcimage <- im.pca(sentdo) 
+# calcolo la percentuale di info racchiusa da pc1
+tot <- sum (1481.61084, 637.61487, 41.93585, 29.44661)
+1481.61084*100 / tot #67.7%
+637.61487*100/tot #29%
+
+viridis <- colorRampPalette(viridis(7))(100)
+plot(pcimage, col=viridis) # la prima immagine sarà quella più simile alla singola banda, perché contiene la maggior parte dell'info
+plot(pcimage, col=viridis(100)) # per far prima
+
+plot(pcimage, col=plasma(100)) # altra palette già fatta su viridis
+
+
+
+
 
 
