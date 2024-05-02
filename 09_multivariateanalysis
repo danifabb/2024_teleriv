@@ -26,3 +26,8 @@ im.plotRGB(sentdo, r=3, g=4, b=2) #metto nir su componente verde
 
 pairs(sentdo) #correlazione tra bande
 
+# b2 è molto correlata con b3 e b4
+# b3 è molto correlata con b2 e b4
+# nir ha correlazione con le altre bande ma è minore (0.71)
+
+
