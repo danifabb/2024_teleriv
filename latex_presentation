@@ -1,0 +1,90 @@
+\documentclass{beamer}
+\usepackage{graphicx} % Required for inserting images
+
+%\usetheme{Frankfurt} % per fare i pallini che ti dicono a che punto sei
+\usetheme{Hannover}
+\usecolortheme{crane} % arancione
+
+
+\title{My first presentation}
+\author{Daniela Fabbri}
+\date{ }
+
+\begin{document}
+
+\maketitle 
+
+% sommario 
+\AtBeginSection[] % Do nothing for \section*
+{
+\begin{frame}{Outline}
+\tableofcontents[currentsection]
+\end{frame}
+}
+
+\section{Introduction}
+
+\begin{frame}{My first slide}
+    My first slide
+\end{frame}
+
+\begin{frame}{Itemize}
+    \begin{itemize}
+        \item My \textbf{first} sentence
+        \item \pause My \textit{second} one % si aggiungono uno alla volta
+        \item \pause My third one here
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Itemize}
+\huge{Random sentence here} % character dimension (\tiny, \scriptsize, etc)
+\end{frame}
+
+\section{Formulas} % latex maths wiki
+ 
+\begin{frame}{Formulas used}
+In this thesis I made use of standard deviation as:
+\bigskip
+% \smallskip
+    \begin{equation}
+        \delta = \sqrt{\frac{\displaystyle\sum_{i=1}^N (x_i - \mu)^2}{N}} 
+        % sommatoria che va da 1 a N; \displaystyle per cambiare il formato della formula (i=1 sotto sommatoria invece che di fianco)
+    \end{equation}
+\end{frame}
+
+\section{Results}
+
+\begin{frame}{Achieved results}
+    \begin{figure}
+        \centering
+        \includegraphics[width=0.9\linewidth]{pres.png} % dimensione della figura rispetto al testo
+    \end{figure}
+\end{frame}
+
+\begin{frame}{Figures one beside the other}
+    \begin{figure}
+        \centering
+        \includegraphics[width=0.4\linewidth]{pres.png}
+        \pause \includegraphics[width=0.4\linewidth]{pres.png}
+    \end{figure}
+\end{frame}
+
+\begin{frame}{Four figures}
+    \begin{figure}
+        \centering
+        \includegraphics[width=0.4\linewidth]{pres.png}
+        \includegraphics[width=0.4\linewidth]{pres.png} \\ % backslash per andare a capo (2,2)
+        \includegraphics[width=0.4\linewidth]{pres.png} 
+        \includegraphics[width=0.4\linewidth]{pres.png} \\
+    \end{figure}
+\end{frame}
+
+\begin{frame}{Courier}
+    In this project we made use of the package \texttt{imageRy}. % carattere Courier per nome pacchetti
+\end{frame}
+
+    
+%\raggedleft o \raggedright per spostare immagine a sx o a dx
+ 
+
+\end{document}
