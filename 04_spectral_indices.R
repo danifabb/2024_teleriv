@@ -38,12 +38,13 @@ im.plotRGB(m2006, 2, 3, 1)
 
 # perché la riflettanza va da 0 a 255; si approssimano i valori di pixel a degli interi
 dvi_1992=  m1992[[1]] - m1992[[2]] #primo e secondo elemento dell'immagine satellitare 
-dvi_1992= matogrosso~2219_lrg_1 - matogrosso~2219_lrg_2  alternative way: cercare precisamente nomi delle bande tra le ifno dell'immagine
+dvi_1992= matogrosso~2219_lrg_1 - matogrosso~2219_lrg_2  alternative way: cercare precisamente nomi delle bande tra le info dell'immagine
+dvi_1992 # from -246 to 255
 
 cl <- colorRampPalette(c("darkblue", "yellow", "red", "black")) (100)
-plot(dvi_1992, col=cl)
+plot(dvi_1992, col=cl) 
 
-dvi_2006 = m2006[[1]] - m2006[[2]]
+dvi_2006 = m2006[[1]] - m2006[[2]]  #from -197 to 255
 plot(dvi_2006, col=cl)
 # valori di DVI molto più bassi nel 2006, biomassa prelevata
 
