@@ -9,7 +9,7 @@ plot(mato)
 b2 <- im.import("sentinel.dolomites.b2.tif") # Tofane; b2 = banda che comprende ciò che riflette nel blu es. acqua
 clg <- colorRampPalette(c("black", "grey", "light grey"))(100) # cambiamo la scala di colori; 100 si riferisce alle sfumature tra un colore e l'altro
 plot(b2, col=clg)
-clcyan <- colorRampPalette(c("magenta", "cyan4", "cyan"))(100)  prendi i colori scrivendo R color names
+clcyan <- colorRampPalette(c("magenta", "cyan4", "cyan"))(100)  #prendi i colori scrivendo R color names
 plot(b2, col=clcyan)
 # la roccia riflette anche nel blu, infatti è bianca, ovvero riflette tutto lo spettro 
 # la parte viola (riflettanza bassa), che non riflette il blu bensì lo assorbe, è la vegetazione, infatti le foglie assorbono blu e rosso, riflettendo il verde
