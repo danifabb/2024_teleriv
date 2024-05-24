@@ -58,7 +58,7 @@ ndvi_2006 <- dvi_2006/ (m2006[[1]] + m2006[[2]])
 
 par(mfrow=c(1,2))
 plot(ndvi_1992, col=cl)
-plot(ndvi_2006, col_cl)
+plot(ndvi_2006, col=cl)
 
 # come possiamo fare per "insegnare" al sistema varie classi? ex. ghiacciaio, pianure, bosco, centro urbano 
 # grafico a 3 dimensioni (per 3 bande) - come sono distribuiti i pixel di una certa immagine nello spazio spettrale? es. riflettanza bassa nel verde, bassa nel  blu, alta nel NIR
