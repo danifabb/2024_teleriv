@@ -1,0 +1,331 @@
+# Project by Daniela Fabbri
+
+# Doñana National Park is a Ramsar site in Andalucia, in southern Spain. It is an important wetland area, with marshes and sand dunes. 
+# The river Guadalquivir flows along the eastern border of the park.  
+# Earth Observatory reports that the area has been experiencing drought for a decade, causing the marshes to dry up,
+# with the years 2021-2023 being the worst (article: https://earthobservatory.nasa.gov/images/152722/rain-revives-donana-national-park).
+# the drought is worsened by the cultivations just outside the park's boundaries, which demand a lot of water.
+# This work aims at showing the effect of drought, both on the marshes and on the vegetation of the park,
+# by comparing satellite images from the same month (April) in 2001 and 2023. The 2023 image was taken from Landsat 8-9,
+# while the 2001 image was taken from Landsat 4-5. 
+
+# libraries and setting of working directory
+library(terra)
+library(imageRy)
+library(ggplot2)
+library(patchwork)
+library(viridis)
+setwd("C:/donana/")
+
+### The IMAGES FROM 2001 were taken on the 10th April.
+# after downloading them, I imported four bands: B1 (blue), B2 (green), B3 (red) and B4 (NIR). 
+b1_01 <- rast("LE07_L2SP_202034_20010410_20200917_02_T1_SR_B1.TIF")
+b2_01 <- rast("LE07_L2SP_202034_20010410_20200917_02_T1_SR_B2.TIF")
+b3_01 <- rast("LE07_L2SP_202034_20010410_20200917_02_T1_SR_B3.TIF")
+b4_01 <- rast("LE07_L2SP_202034_20010410_20200917_02_T1_SR_B4.TIF")
+
+# building an image with multiple layers/ bands
+stacksent_01 <- c(b1_01, b2_01, b3_01, b4_01) 
+cl <- colorRampPalette(c("darkblue", "yellow", "red", "black")) (100)
+plot(stacksent_01, col=cl) 
+
+# plotting an image with natural colors (RGB): B3 is red, therefore I put it in first place here, etc. 
+im.plotRGB(stacksent_01, r=3, g=2, b=1) 
+im.plotRGB(stacksent_01, r=4, g=3, b=2) # when NIR is put on the red band, the vegetation appears red and the water black
+
+### doing the same process with the IMAGES FROM 23rd APRIL 2023. Bands: B2 = blue, B3 = green, B4 = red, B5= NIR.
+b2_23 <- rast("LC09_L2SP_202034_20230423_20230425_02_T1_SR_B2.TIF")
+b3_23 <- rast("LC09_L2SP_202034_20230423_20230425_02_T1_SR_B3.TIF")
+b4_23 <- rast("LC09_L2SP_202034_20230423_20230425_02_T1_SR_B4.TIF")
+b5_23 <- rast("LC09_L2SP_202034_20230423_20230425_02_T1_SR_B5.TIF")
+stacksent_23 <- c(b2_23, b3_23, b4_23, b5_23)
+plot(stacksent_23, col=cl)
+im.plotRGB(stacksent_23, r=3, g=2, b=1)
+
+# export image
+jpeg("image_2023_nat_col.jpg", width = 800, height = 800)
+im.plotRGB(stacksent_23, r=3, g=2, b=1)
+dev.off()
+
+### before using the images to do further analysis, it is necessary to CUT them, as they include a much bigger area than the park.
+# cropping the 2001 image
+ext_3 <- c(720000, 760000, 4070000, 4130000) # the image can be cut by using the numbers (?) on the edges
+stacksent_01_cropped <- crop(stacksent_01, ext_3) 
+im.plotRGB(stacksent_01_cropped, r=3, g=2, b=1) # now I have selected roughly the area of the park
+im.plotRGB(stacksent_01_cropped, 4, 3, 2) 
+
+# cropping of 2023 image as well
+stacksent_23_cropped <- crop(stacksent_23, ext_3)
+im.plotRGB(stacksent_23_cropped, r=3, g=2, b=1)
+im.plotRGB(stacksent_23_cropped, 4, 3, 2)
+
+# export file
+jpeg("zoom_2023.jpg")
+par(mfrow=c(1,2))
+im.plotRGB(stacksent_23_cropped, r=3, g=2, b=1)
+dev.off()
+
+# the cropped images are then saved as jpeg with:
+# band 1 = NIR
+# band 2 = red
+# band 3 = green
+
+jpeg("nir_01.jpg", width = 2000, height = 2000, res = 300)
+im.plotRGB(stacksent_01_cropped, 4, 3, 2)
+dev.off()
+
+jpeg("nir_23.jpg", width = 2000, height = 2000, res = 300)
+im.plotRGB(stacksent_23_cropped, 4, 3, 2)
+dev.off()
+
+#export both files 
+jpeg("2001_2023_nir_images.jpg")
+par(mfrow=c(1,2))
+im.plotRGB(stacksent_01_cropped, 4, 3, 2)
+im.plotRGB(stacksent_23_cropped, 4, 3, 2)
+dev.off()
+
+# replotting images with band 1 = NIR, band 2 = red, band 3 = green
+nir_01 <- rast("nir_01.jpg") # importing new .jpg image
+im.plotRGB(nir_01, 1, 2, 3)
+
+nir_23 <- rast("nir_23.jpg")
+im.plotRGB(nir_23, 1, 2, 3)
+
+
+### THIS ANALYSIS CAN BE DIVIDED INTO --- PARTS:
+# 1. Spectral indices: calculation of NDWI and NDVI
+# 2. Quantification of changes through time 
+# 3. Standard deviation 
+
+### 1. SPECTRAL INDICES
+# DWI = Difference Water Index; it is used for water bodies detection. 
+# the NIR band (water absorbs light at this wavelength) is subtracted from the green band (water reflects light at this λ)
+
+# DWI for 2001
+dwi_01 = nir_01[[3]] - nir_01[[1]]
+plot(dwi_01, col=cl)
+# the index needs to be normalized so that the values from 2001 and 2023 can be compared:
+ndwi_01 = dwi_01/(nir_01[[3]] + nir_01[[1]]) 
+plot(ndwi_01, col=cl) # index ranges from -1 to 1
+
+# DWI and NDWI for 2023
+dwi_23 = nir_23[[3]] - nir_23[[1]]
+plot(dwi_23, col=cl)
+ndwi_23 = dwi_23/(nir_23[[3]] + nir_23[[1]])
+plot(ndwi_23, col=cl)
+
+# export files
+jpeg("2001_ndwi.jpg")
+plot(ndwi_01, col=cl)
+dev.off()
+jpeg("2023_ndwi.jpg")
+plot(ndwi_23, col=cl)
+dev.off()
+
+# results: in April 2001, a big portion of the wetland area was filled with water,
+# whereas in April 2023 the  marshes were largely dried up
+
+# DVI = Difference Vegetation Index; it is used for identifying (un)healthy vegetation 
+# the red band (vegetation absorbs light at this wavelength) is subtracted from the NIR band (vegetation reflects light at this λ)
+# DVI and NDVI for 2001
+dvi_01 = nir_01[[1]] - nir_01[[2]]
+plot(dvi_01, col=cl)
+ndvi_01 = dvi_01/ (nir_01[[1]] + nir_01[[2]])
+plot(ndvi_01, col=cl) # range from -1 to 1
+
+# DVI and NDVI for 2023
+dvi_23 = nir_23[[1]] - nir_23[[2]]
+plot(dvi_23, col=cl)
+ndvi_23 = dvi_23/(nir_23[[1]] + nir_23[[2]])
+plot(ndvi_23, col=cl)
+
+#export files
+jpeg("2001_ndvi.jpg")
+plot(ndvi_01, col=cl)
+dev.off()
+jpeg("2023_ndvi.jpg")
+plot(ndvi_23, col=cl)
+dev.off()
+
+# results: the 2001 has higher NDVI values in the northern portion of the park (vegetation decreased over the years in those places)
+# attention: the bottom right area in the image is outside of the park's boundaries, where there are cultivations.
+
+# matrix that shows a comparison between 2001 NDWI and 2023 NDWI
+par(mfrow=c(2,2))
+im.plotRGB(nir_01, 1, 2, 3)
+im.plotRGB(nir_23, 1, 2, 3)
+plot(ndwi_01, col=cl)
+plot(ndwi_23, col=cl)
+
+# matrix that shows a comparison between 2001 NDVI and 2023 NDVI
+par(mfrow=c(2,2))
+im.plotRGB(nir_01, 1, 2, 3)
+im.plotRGB(nir_23, 1, 2, 3)
+plot(ndvi_01, col=cl)
+plot(ndvi_23, col=cl)
+
+### 2. QUANTIFICATION OF CHANGES THROUGH TIME
+# I am going to use two methods to compare the changes that the area has experienced from 2001 to 2023: time series analysis and classification
+
+# TIME SERIES ANALYSIS 
+ 
+stack_nir <- c(nir_01, nir_23)
+nir_diff = stack_nir[[1]] - stack_nir[[2]] # calculating the difference between NIR images in 2001 and in 2023
+clg <- colorRampPalette(c("blue", "white", "red")) (100) 
+plot(nir_diff, col=clg) # red values indicate that vegetation decreased from 2021 to 2023 (the difference is positive),
+# whereas in the eastern part the situation has remained roughly the same or slightly increased (blue area)
+
+ndvi_diff = ndvi_01 - ndvi_23
+plot(ndvi_diff, col=clg) # difference between 2001 and 2023 ndvi shows the same results
+
+#export file
+jpeg("2001_2023_difference.jpg")
+plot(ndvi_diff, main="Difference in NDVI from 2001 to 2023", col=clg)
+dev.off()
+
+par(mfrow=c(1,3))
+plot(ndvi_01, col=cl)
+plot(ndvi_23, col=cl)
+plot(ndvi_diff, col=clg)
+
+# CLASSIFICATION (just for changes in water cover)
+# for this classification, I am going to use the NIR band, which clearly shows the difference between land and water
+b4_01_cropped <- crop(b4_01, ext_3) # cutting the NIR band for both 2001 and 2023
+b5_23_cropped <- crop(b5_23, ext_3)
+
+# I am going to use the im.classify function to establish 2 different clusters: water and land
+nir_01c <- im.classify(b4_01_cropped, num_clusters=2)
+nir_23c <- im.classify(b5_23_cropped, num_clusters=2)
+plot(nir_01c) # the marshes are visible in the southern and eastern portion of the park
+plot(nir_23c) # the marshes are almost completely dried up
+
+# export files
+jpeg("2001_classes.jpg")
+plot(nir_01c)
+dev.off()
+jpeg("2023_classes.jpg")
+plot(nir_23c)
+dev.off()
+
+# calculating the percentage of water and land pixels for 2001
+f01 <- freq(nir_01c) 
+f01
+tot01 <- ncell(nir_01c)
+prop01 = f01 / tot01
+prop01 # 0,30 + 0,70
+perc01 = prop01 *100
+perc01 # 30% water 
+
+# calculating the percentage of water and land pixels for 2023
+f23 <- freq(nir_23c)
+f23
+tot23 <- ncell(nir_23c)
+prop23 = f23/ tot23
+prop23 # 0,87 + 0,13
+perc01 = prop01 *100
+perc23 = prop23 *100
+perc23 # 13% water
+
+# selecting names for the 2 clusters 
+class <- c("land", "water") 
+y01 <- c(70, 30)
+y23 <- c(87, 13)
+
+tabout <- data.frame(class, y01, y23)
+View(tabout)
+
+# creating ggplot2 graphs (histograms)
+p1 <- ggplot(tabout, aes(x=class, y=y01, color=class)) + geom_bar(stat="identity", fill="white")
+p2 <- ggplot(tabout, aes(x=class, y=y23, color=class)) + geom_bar(stat="identity", fill="white")
+
+#let's put the two graphs together with patchwork
+p1 + p2
+
+# correcting for axis range
+p1 <- ggplot(tabout, aes(x=class, y=y01, color=class)) + geom_bar(stat="identity", fill="white") +  ylim(c(0, 100))
+p2 <- ggplot(tabout, aes(x=class, y=y23, color=class)) + geom_bar(stat="identity", fill="white") +  ylim(c(0, 100))
+p1 + p2
+
+jpeg("classification_histogram.jpg")
+p1 + p2
+dev.off()
+
+### 3. STANDARD DEVIATION: index that is used to measure variability; here it is going to show pixel variability. 
+
+# firstly, I am going to calculate sd on just one band (NIR)
+nir_01_1 <- nir_01[[1]] # selecting nir band
+plot(nir_01_1, col=cl)
+
+nir_23_1 <- nir_23[[1]] 
+plot(nir_23_1, col=cl)
+
+# 3 different sd calculated using moving windows of different size:
+
+# 2001
+sd3_01 <- focal(nir_01_1, matrix(1/9, 3, 3), fun=sd) 
+plot(sd3_01, col=viridis(100)) # microvariations are highlighted
+sd7_01 <- focal(nir_01_1, matrix(1/49, 7, 7), fun=sd) 
+sd13_01 <- focal(nir_01_1, matrix(1/169, 13, 13), fun=sd) 
+stackd_01 <- c(sd3_01, sd7_01, sd13_01) 
+plot(stackd_01, col=viridis(100)) # sd13 shows the difference between land and water the best (macrovariations are highlighted)
+
+#exporting files
+jpeg("2001_sd13.jpg")
+plot(sd13_01, col=viridis(100))
+dev.off()
+
+# 2023
+sd3_23 <- focal(nir_23_1, matrix(1/9, 3, 3), fun=sd) 
+plot(sd3_23, col=viridis(100)) 
+sd7_23 <- focal(nir_23_1, matrix(1/49, 7, 7), fun=sd) 
+sd13_23 <- focal(nir_23_1, matrix(1/169, 13, 13), fun=sd) # same as above
+stackd_23 <- c(sd3_23, sd7_23, sd13_23) 
+plot(stackd_23, col=viridis(100))
+
+#exporting files
+jpeg("2023_sd13.jpg")
+plot(sd13_23, col=viridis(100))
+dev.off()
+
+# I am going to do a PCA  that will allow me to make a multivariate analysis
+# if the different bands have a high correlation, I can "summarize" the information tha each of them carries into one dimension only.
+
+pairs(nir_01) # green and red band are highly correlated; NIR is less correlated with the other 2 bands 
+pairs(nir_23) # same as above
+
+# 2001 PCA 
+pcimage_01 <- im.pca(nir_01) 
+tot <- sum(134.069963, 51.434891, 9.165451)
+134.069963*100/tot # PCI explains 68.87% of the data
+51.434891*100/tot # PCI explains 30.5% of the data
+
+sd3_pca <- focal(pcimage_01, matrix(1/9, 3, 3), fun=sd) 
+plot(sd3_pca, col=viridis(100))
+sd7_pca <- focal(pcimage_01, matrix(1/49, 7, 7), fun=sd) 
+sd13_pca <- focal(pcimage_01, matrix(1/169, 13, 13), fun=sd) 
+stackd_pca <- c(sd3_pca, sd7_pca, sd13_pca) 
+plot(stackd_pca, col=viridis(100))
+
+# 2023 PCA
+pcimage_23 <- im.pca(nir_23)
+tot <- sum(133.34973, 25.85323, 9.46287)
+133.34973*100/tot # PCI explains 79.06% of the data
+
+sd3_pca2 <- focal(pcimage_23, matrix(1/9, 3, 3), fun=sd) 
+plot(sd3_pca2, col=viridis(100)) 
+sd7_pca2 <- focal(pcimage_23, matrix(1/49, 7, 7), fun=sd) 
+sd13_pca2 <- focal(pcimage_23, matrix(1/169, 13, 13), fun=sd) 
+stackd_pca2 <- c(sd3_pca2, sd7_pca2, sd13_pca2)
+plot(stackd_pca2, col=viridis(100))
+
+# conclusions: the data show a decrease in the amount of water present in the wetland area (30% in 2001 and 13% in 2023); 
+# when it comes to vegetation, the situation is more nuanced, with the northern part of the park having experienced a decrease vegetation
+# and the eastern part being more stable
+
+### Sources:
+# https://www.spain.info/it/natura/parco-nazionale-donana/
+# Earth observatory
+# https://whc.unesco.org/
+# https://custom-scripts.sentinel-hub.com/custom-scripts/sentinel-3/ndwi/
+# https://custom-scripts.sentinel-hub.com/custom-scripts/sentinel-3/ndvi/
