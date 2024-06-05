@@ -1,3 +1,11 @@
+# Range di valori di riflettanza da 0 a 100. Se ho una pianta, essa avrà 90 di riflettanza in NIR e 10 di riflettanza in rosso. 90 - 10
+# Albero che sta morendo? Faccio lo stesso calcolo MA mesofillo fogliare è collassato, cellule morenti e ammassate l’una sull’altra
+# NIR non viene più riflesso in quel modo: è riflesso debolmente perché la struttura della pianta è cambiata. Riflettanza nel NIR diventa 60.
+# Invece la riflettanza nel rosso aumenta, perché l’assorbimento è meno efficiente es. 30. Fotosintesi non è operata a dovere. DVI = 60 – 30 = 30.
+# ->	Calcolo della biomassa presente in certa area grazie all'indice. 
+# Firma spettrale = impronta digitale della luce nelle varie lungh d’onda. 
+
+
 library(terra)
 library(imageRy)
 im.list()
@@ -36,9 +44,17 @@ im.plotRGB(m2006, r=1, g=2, b=3)
 im.plotRGB(m2006, r=2, g=1, b=3)
 im.plotRGB(m2006, 2, 3, 1)
 
-# perché la riflettanza va da 0 a 255; si approssimano i valori di pixel a degli interi
+# risoluzione spaziale = dimensione di pixel
+# Risoluzione radiometrica: quanti valori stiamo usando (8 bit, 16 bit, ecc)
+# 1 bit = 2 info (o 0 o 1)
+# 2 bit = 4 info (00 01 10 11)
+# 3 bit (000 001 011 010 100 101 110 111)
+# 4 bit - 16 info
+
+# gran parte delle immagini di Landsat sono a 8 bit -> 256 -> la scala varia da 0 a 255. 
+# la riflettanza va da 0 a 255; si approssimano i valori di pixel a degli interi
 dvi_1992=  m1992[[1]] - m1992[[2]] #primo e secondo elemento dell'immagine satellitare 
-dvi_1992= matogrosso~2219_lrg_1 - matogrosso~2219_lrg_2  alternative way: cercare precisamente nomi delle bande tra le info dell'immagine
+dvi_1992= matogrosso~2219_lrg_1 - matogrosso~2219_lrg_2  # alternative way: cercare precisamente nomi delle bande tra le info dell'immagine
 dvi_1992 # from -246 to 255
 
 cl <- colorRampPalette(c("darkblue", "yellow", "red", "black")) (100)
@@ -52,7 +68,13 @@ par(mfrow=c(1,2))
 plot(dvi_1992, col=cl)
 plot(dvi_2006, col=cl)
 
-#normalized dvi
+# 255 – 0/ 255 + 0 = 1 (Massimo NIR, minimo RED)
+# 0 – 255/ 0 + 255 = -1 (minimo NIR, massimo RED)
+# Confrontabile con:
+# 15 – 0/ 15 + 0= 1
+# 0-15/0+15= -1
+# Se ho un’immagine a 8 bit (da -255 a 255) e una a 4 bit (da -15 a 15), esse non sono confrontabili; bisogna fare una normalizzazione 
+# normalized dvi
 ndvi_1992 <- dvi_1992/ (m1992[[1]] + m1992[[2]])
 ndvi_2006 <- dvi_2006/ (m2006[[1]] + m2006[[2]])
 
