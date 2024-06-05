@@ -1,7 +1,8 @@
 # stardand deviation to study variability
 #sottraggo media campionaria da ogni campione, elevo al quadrato (amplificazione del dato); divido per n - 1 (numero di studenti - 1) e faccio radice quadrata
-# deviazione standard rappresenta intervallo che include il 68 % dei dati
-# se aggiungo u dati esterni che spostano la media, cambierà molto anche la deviazione standard
+ sd = radice quadrata della varianza
+# deviazione standard rappresenta l'intervallo che include il 68 % dei dati
+# se aggiungo dati esterni che spostano la media, cambierà molto anche la deviazione standard
 
 #pacchetto viridis (mappe per daltonici)
 # measuring spatial variability
@@ -43,12 +44,13 @@ viridisc <- colorRampPalette(viridis(7))(100)
 plot(sd3, col=viridisc) # si vedono bene i crateri a nord-ovest e nella parte dx dell'immagine; sono evidenziati i punti in cui la variabilità è più alta es. punti in cui si passa da crepaccio a foresta
 
 sd7 <- focal(nir, matrix(1/49, 7, 7), fun=sd) 
-plot(sd7, col=viridisc) # molti più pixel inseriti nel calcolo - questa questione dei pixel non l'hai capita
+plot(sd7, col=viridisc) # molti più pixel inseriti nel calcolo 
 
 sd13 <- focal(nir, matrix(1/169, 13, 13), fun=sd) 
 plot(sd13, col=viridisc)
 
-# finestre di calcolo più piccole come 3x3 individuano microvariazioni, dettagli minori (--> massima sd è maggiore), mentre finestre di calcolo più grandi individuano macrovariazioni (--> massima sd è minore)
+# finestre di calcolo più piccole come 3x3 individuano microvariazioni, dettagli minori (-> massima sd è maggiore),
+# mentre finestre di calcolo più grandi individuano macrovariazioni (--> massima sd è minore)
 # n aumenta --> sd diminuisce! (vedi formula)
 stacksd <- c(sd3, sd7, sd13)
 plot(stacksd, col=viridisc)
