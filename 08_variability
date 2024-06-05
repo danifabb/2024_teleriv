@@ -55,11 +55,6 @@ plot(sd13, col=viridisc)
 stacksd <- c(sd3, sd7, sd13)
 plot(stacksd, col=viridisc)
 
-#per analisi multivariata: possiamo spiegare la varianza; banda b1 e b2 sono correlate 
-# il primo asse spiega la maggior parte della varianza mentre il secondo asse spiega solo il 10%. posso usare la prima componente per fare i calcoli, perdendo solo il 10% dell'informazione
-# se c'è alta correlazione fra le bande, si può usare analisi multivariata
-
-
 
 
 
