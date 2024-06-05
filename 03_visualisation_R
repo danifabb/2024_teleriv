@@ -1,4 +1,6 @@
 # satellite data visulisation in R by imageRy
+# Tanti sensori all’interno del satellite rilevano/ registrano varie lunghezze d’onda: ad ogni lunghezza d’onda corrisponde una banda. Es. b2 = blu. 
+# Sentinel2 10 m spatial resolution bands: b2 (490 nm), b3 (530 nm), ecc.
 library(terra)
 library(imageRy) #tutte le funzioni iniziano con im.
 im.list() #lista di dati che abbiamo già caricato nel pacchetto
@@ -45,7 +47,7 @@ plot(b4, col=cl4)
 plot(b8, col=cl4)
 
 # stack: singola immagine satellitare con tutte le bande assieme
-stacksent <- c(b2, b3, b4, b8)
+stacksent <- c(b2, b3, b4, b8) # Stacksent è multispettrale, mette insieme bande di diversi spettri
 plot(stacksent, col=cl4)
 
 # singoli elementi selezionati con la parentesi quadra
@@ -88,8 +90,8 @@ im.plotRGB(stacksent, 3, 4, 2) # infrarosso al posto del verde: tutto ciò che r
 # information on correlation between pairs of bands (red vs blue, red vs green, etc.)
 # correlation shown through graphs and Pearson's correlation index
 pairs(stacksent)
-
-b2
+# Grafici: si vede la grossa correlazione tra verde e blu, tra verde e rosso, ecc. con IR si vede che il grafico mostra meno correlazione
+#Indice di correlazione di Pearson: valori alti di correlazione per verde, rosso e blu (0, 99 o 1); rispetto all’IR c’è invece poca correlazione (0,7)!
 
 # falsi colori = infrarosso
 # cosa sono gli indici spettrali? 
