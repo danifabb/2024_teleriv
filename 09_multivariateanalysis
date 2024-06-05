@@ -1,13 +1,14 @@
-# come compattare un dato in una sola dimensione: l'analisi multivariata
-# immagini iperspettrali: centinaia di bande. Non si può scegliere 1 banda sola per fare il calcolo come abbiamo fatto l'altra volta (calcolo sd)
-# Salvador Dalì voleva rappresentare la quarta dimensione; ipercubo/ croce in quattro dimensioni
+# se c'è alta correlazione fra le bande, si può usare analisi multivariata, che compatta il dato in una sola dimensione
+# es. banda b1 e b2 sono correlate 
+# se ho un'immagine iperspettrale con centinaia di bande, non si può scegliere 1 banda sola per fare il calcolo sd
+# il primo asse spiega la maggior parte della varianza mentre il secondo asse spiega solo il 10%. posso usare la prima componente per fare i calcoli, perdendo solo il 10% dell'informazione# Salvador Dalì voleva rappresentare la quarta dimensione; ipercubo/ croce in quattro dimensioni
 
 # abbiamo variabili che sono correlate tra loro? Possiamo racchiuderle/ compattarle in un'unica dimensione
 # grafico con 2 bande correlate tra loro
 # analisi delle componenti principali: 2 nuovi assi, PC1 e PC2 (principal components) che spiegano assieme tutta l'informazione 
-# PC1 spiega 90% dell'informazione (contiene gran parte del range del dato originario), PC2 spiega l'altro 10% --> posso fare analisi sulla PC1
+# PC1 spiega 90% dell'informazione (contiene gran parte del range del dato originario), PC2 spiega l'altro 10% -> posso fare analisi sulla PC1
 # se le due bande non sono correlate linearmente, si usano i logaritmi
-# temperatura, pressione, pH, quota: non si va da 0 a 255 come per i bit --> bisogna standardizzare dati
+# temperatura, pressione, pH, quota: non si va da 0 a 255 come per i bit -> bisogna standardizzare dati
 
 library(terra)
 library(imageRy)
