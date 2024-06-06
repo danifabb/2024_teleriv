@@ -82,10 +82,10 @@ nir_23 <- rast("nir_23.jpg")
 im.plotRGB(nir_23, 1, 2, 3)
 
 
-### THIS ANALYSIS CAN BE DIVIDED INTO --- PARTS:
+### THIS ANALYSIS CAN BE DIVIDED INTO 3 PARTS:
 # 1. Spectral indices: calculation of NDWI and NDVI
 # 2. Quantification of changes through time 
-# 3. Standard deviation 
+# 3. Variability and standard deviation 
 
 ### 1. SPECTRAL INDICES
 # DWI = Difference Water Index; it is used for water bodies detection. 
