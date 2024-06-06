@@ -42,11 +42,6 @@ stacksent_23 <- c(b2_23, b3_23, b4_23, b5_23)
 plot(stacksent_23, col=cl)
 im.plotRGB(stacksent_23, r=3, g=2, b=1)
 
-# export image
-jpeg("image_2023_nat_col.jpg", width = 800, height = 800)
-im.plotRGB(stacksent_23, r=3, g=2, b=1)
-dev.off()
-
 ### before using the images to do further analysis, it is necessary to CUT them, as they include a much bigger area than the park.
 # cropping the 2001 image
 ext_3 <- c(720000, 760000, 4070000, 4130000) # the image can be cut by using the numbers (?) on the edges
@@ -58,12 +53,6 @@ im.plotRGB(stacksent_01_cropped, 4, 3, 2)
 stacksent_23_cropped <- crop(stacksent_23, ext_3)
 im.plotRGB(stacksent_23_cropped, r=3, g=2, b=1)
 im.plotRGB(stacksent_23_cropped, 4, 3, 2)
-
-# export file
-jpeg("zoom_2023.jpg")
-par(mfrow=c(1,2))
-im.plotRGB(stacksent_23_cropped, r=3, g=2, b=1)
-dev.off()
 
 # the cropped images are then saved as jpeg with:
 # band 1 = NIR
@@ -115,16 +104,8 @@ plot(dwi_23, col=cl)
 ndwi_23 = dwi_23/(nir_23[[3]] + nir_23[[1]])
 plot(ndwi_23, col=cl)
 
-# export files
-jpeg("2001_ndwi.jpg")
-plot(ndwi_01, col=cl)
-dev.off()
-jpeg("2023_ndwi.jpg")
-plot(ndwi_23, col=cl)
-dev.off()
-
 # results: in April 2001, a big portion of the wetland area was filled with water,
-# whereas in April 2023 the  marshes were largely dried up
+# whereas in April 2023 the marshes were largely dried up
 
 # DVI = Difference Vegetation Index; it is used for identifying (un)healthy vegetation 
 # the red band (vegetation absorbs light at this wavelength) is subtracted from the NIR band (vegetation reflects light at this λ)
@@ -139,14 +120,6 @@ dvi_23 = nir_23[[1]] - nir_23[[2]]
 plot(dvi_23, col=cl)
 ndvi_23 = dvi_23/(nir_23[[1]] + nir_23[[2]])
 plot(ndvi_23, col=cl)
-
-#export files
-jpeg("2001_ndvi.jpg")
-plot(ndvi_01, col=cl)
-dev.off()
-jpeg("2023_ndvi.jpg")
-plot(ndvi_23, col=cl)
-dev.off()
 
 # results: the 2001 has higher NDVI values in the northern portion of the park (vegetation decreased over the years in those places)
 # attention: the bottom right area in the image is outside of the park's boundaries, where there are cultivations.
@@ -179,11 +152,6 @@ plot(nir_diff, col=clg) # red values indicate that vegetation decreased from 202
 ndvi_diff = ndvi_01 - ndvi_23
 plot(ndvi_diff, col=clg) # difference between 2001 and 2023 ndvi shows the same results
 
-#export file
-jpeg("2001_2023_difference.jpg")
-plot(ndvi_diff, main="Difference in NDVI from 2001 to 2023", col=clg)
-dev.off()
-
 par(mfrow=c(1,3))
 plot(ndvi_01, col=cl)
 plot(ndvi_23, col=cl)
@@ -199,14 +167,6 @@ nir_01c <- im.classify(b4_01_cropped, num_clusters=2)
 nir_23c <- im.classify(b5_23_cropped, num_clusters=2)
 plot(nir_01c) # the marshes are visible in the southern and eastern portion of the park
 plot(nir_23c) # the marshes are almost completely dried up
-
-# export files
-jpeg("2001_classes.jpg")
-plot(nir_01c)
-dev.off()
-jpeg("2023_classes.jpg")
-plot(nir_23c)
-dev.off()
 
 # calculating the percentage of water and land pixels for 2001
 f01 <- freq(nir_01c) 
@@ -270,11 +230,6 @@ sd13_01 <- focal(nir_01_1, matrix(1/169, 13, 13), fun=sd)
 stackd_01 <- c(sd3_01, sd7_01, sd13_01) 
 plot(stackd_01, col=viridis(100)) # sd13 shows the difference between land and water the best (macrovariations are highlighted)
 
-#exporting files
-jpeg("2001_sd13.jpg")
-plot(sd13_01, col=viridis(100))
-dev.off()
-
 # 2023
 sd3_23 <- focal(nir_23_1, matrix(1/9, 3, 3), fun=sd) 
 plot(sd3_23, col=viridis(100)) 
@@ -283,10 +238,6 @@ sd13_23 <- focal(nir_23_1, matrix(1/169, 13, 13), fun=sd) # same as above
 stackd_23 <- c(sd3_23, sd7_23, sd13_23) 
 plot(stackd_23, col=viridis(100))
 
-#exporting files
-jpeg("2023_sd13.jpg")
-plot(sd13_23, col=viridis(100))
-dev.off()
 
 # I am going to do a PCA  that will allow me to make a multivariate analysis
 # if the different bands have a high correlation, I can "summarize" the information tha each of them carries into one dimension only.
@@ -320,8 +271,8 @@ stackd_pca2 <- c(sd3_pca2, sd7_pca2, sd13_pca2)
 plot(stackd_pca2, col=viridis(100))
 
 # conclusions: the data show a decrease in the amount of water present in the wetland area (30% in 2001 and 13% in 2023); 
-# when it comes to vegetation, the situation is more nuanced, with the northern part of the park having experienced a decrease vegetation
-# and the eastern part being more stable
+# when it comes to vegetation, the situation is more nuanced, with the northern part of the park having experienced some decrease in vegetation
+
 
 ### Sources:
 # https://www.spain.info/it/natura/parco-nazionale-donana/
